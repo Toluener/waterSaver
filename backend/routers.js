@@ -15,8 +15,13 @@ require('dotenv').config({path: './configurations/Env.env'});
 
 
 
+const allowedOrigins = [
+    "http://102.89.82.236:3000",
+    "https://water-saver-project.vercel.app/",
+  ]
+
 router.use(cors({
-    origin: "https://water-saver-project.vercel.app/",
+    origin: allowedOrigins,
     credentials: true
 }));
 router.use(express.urlencoded({extended: true}));
