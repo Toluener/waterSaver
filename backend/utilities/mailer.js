@@ -73,8 +73,6 @@ let sendWelcomeEmail = async (subject, text)=>{
                 }catch(err){
                     console.log(err);
                 }
-            }else{
-                return;
             }
     }
 }
