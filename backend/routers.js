@@ -70,7 +70,6 @@ router.post('/signin', async (req, res)=>{
    let user = await userModel.findOne({email});
 
    if(!user){
-    console.log('User not found');
     return res.status(404).json({message:'user does not exist, please register'});;
    } else if(user && user.password != password){
     console.log('password mismatch, please try again');
@@ -334,8 +333,11 @@ router.post('/laundryInputs', isAuthenticated, async (req, res)=>{
             );
             return res.status(200).json({message: 'updated daily water usage to include laudry input'});
         }
-        else{
+        else if(!dailyInput){
            return res.status(404).json({message: 'Please fill in the forms in the sequential order'});
+        }
+        else{
+            return res.status(400).json({message: 'Please ensure you fill in the inputs properly'});
         }
     }catch(err){
         console.log(err);
