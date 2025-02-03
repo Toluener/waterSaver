@@ -270,7 +270,10 @@ router.post('/kitchenInputs', isAuthenticated, async (req, res)=>{
             return res.status(200).json({message: 'updated daily water usage to include kitchen inputs'});
         }
         else if(!dailyInput){
-            return res.status(404).json('Please fill in the form in the sequential order');
+            return res.status(404).json({message: 'Please fill in the form in the sequential order'});
+        }
+        else{
+            return res.status(400).json({message: 'Please ensure you fill in the inputs properly'});
         }
     }catch(err){
         console.log(err);
