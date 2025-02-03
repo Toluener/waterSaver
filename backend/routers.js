@@ -16,14 +16,16 @@ require('dotenv').config({path: './configurations/Env.env'});
 
 
 const allowedOrigins = [
-    "http://102.89.82.236:3000",
-    "https://water-saver-project.vercel.app/",
-  ]
+    "http://localhost:3000", // ✅ Allow local development
+    "http://102.89.82.236:3000", // ✅ Allow frontend on another laptop
+    "https://your-frontend.com", // ✅ (Optional) If your frontend is deployed
+  ];
 
 router.use(cors({
-    origin: "http://102.89.82.236:3000",
+    origin: allowedOrigins,
     credentials: true
 }));
+
 router.use(express.urlencoded({extended: true}));
 router.use(bodyParser.json());
 router.use(express.json());
