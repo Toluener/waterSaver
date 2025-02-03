@@ -64,7 +64,7 @@ let sendWelcomeEmail = async (subject, text)=>{
                     console.log(`sending welcome mail to ${users[i].email}`);
                     await transporter.sendMail(mailOptions);
                     await userModel.updateOne(
-                        {user: req.session.email},
+                        {user: users[i].email},
                         {$set: {
                             emailed: 'Sent'
                         }}
