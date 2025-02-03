@@ -390,7 +390,7 @@ router.post('/outdoorInputs', isAuthenticated, async (req, res)=>{
                     carWaterUsage: carWaterUsage
                 }}
             );
-            return res.status(200).json({message: 'outdoor water usage added'});
+            return res.status(200).json({message: 'Outdoor water usage added'});
             }
             else if(swimmingPoolWaterUsage){
                 await dailyWaterUsageModel.updateOne(
@@ -399,7 +399,7 @@ router.post('/outdoorInputs', isAuthenticated, async (req, res)=>{
                         swimmingPoolWaterUsage: swimmingPoolWaterUsage,
                     }}
                 );
-                return res.status(200).json({message: 'outdoor water usage added'});
+                return res.status(200).json({message: 'Outdoor water usage added'});
             } 
             else if(carWaterUsage){
                 await dailyWaterUsageModel.updateOne(
@@ -408,7 +408,7 @@ router.post('/outdoorInputs', isAuthenticated, async (req, res)=>{
                         carWaterUsage: carWaterUsage
                     }}
                 );
-                return res.status(200).json({message: 'outdoor water usage added'});
+                return res.status(200).json({message: 'Outdoor water usage added'});
             }
             else{
                 return res.status(204);
@@ -458,7 +458,7 @@ router.post('/logout', isAuthenticated, (req, res)=>{
             return res.status(500).json({message: "Logout failed"});
         }
         res.clearCookie('waterSaverC');
-        res.status(200).json({ message: "logout successful"});
+        res.status(200).json({ message: "Logout successful"});
     })
 })
 
