@@ -15,7 +15,10 @@ require('dotenv').config({path: './configurations/Env.env'});
 
 
 
-router.use(cors({}));
+router.use(cors({
+    origin: "http://192.168.1.100:3000",
+    credentials: true
+}));
 router.use(express.urlencoded({extended: true}));
 router.use(bodyParser.json());
 router.use(express.json());
@@ -78,7 +81,7 @@ router.post('/signin', async (req, res)=>{
     req.session.email = user.email;
     return res.status(200).json({
         message: "you're logged in",
-        cookie: req.session.cookie
+        cookie: `waterSaverC=${req.sessionID}`
     });
    }
    } catch(err){
