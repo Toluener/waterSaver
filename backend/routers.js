@@ -127,7 +127,7 @@ router.post('/subscribe', isAuthenticated, async (req, res)=>{
 
 
 //route to obtain basic info (tested)
-router.post('/basicInfo', isAuthenticated, async (req, res)=>{
+router.post('/basicInfo', async (req, res)=>{
     let {occupants} = req.body;
     try{
         let today = formatDate(new Date());
