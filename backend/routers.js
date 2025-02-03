@@ -39,7 +39,7 @@ router.use(session({
 
 
 
-//route to get users' registration details (tested)
+//route to get users' registration details (tested)]
 router.post('/register', async (req, res)=>{
     console.log(req.body);
     try{
@@ -63,7 +63,7 @@ router.post('/register', async (req, res)=>{
 
 
 
-//route to check if the user exists and the password matches (tested)
+//route to check if the user exists and the password matches (tested)]
 router.post('/signin', async (req, res)=>{
    try{
     let {email, password} = req.body;
@@ -86,7 +86,7 @@ router.post('/signin', async (req, res)=>{
 })
 
 
-//checking for user session before allowing API calls <>
+//checking for user session before allowing API calls]
 router.get('/checkSession', (req, res)=>{
     if(req.session.email){
         res.json({loggedIn: true});
@@ -95,7 +95,7 @@ router.get('/checkSession', (req, res)=>{
 
 
 
-//route to obtain user's subscription (tested)
+//route to obtain user's subscription (tested)]
 router.post('/subscribe', isAuthenticated, async (req, res)=>{
     let subscription = req.body;
     //check for existing subscription
@@ -107,7 +107,7 @@ router.post('/subscribe', isAuthenticated, async (req, res)=>{
            return res.status(201).json({message: 'User has successfully subscribed'});
         }catch(err){
             console.log(err);
-            res.status(500).json({message: err});
+            return res.status(500).json({message: err});
         }
     } else{ return res.status(409).json({message: 'You already have an existing subscription'});}
 })
@@ -126,7 +126,7 @@ router.post('/basicInfo', isAuthenticated, async (req, res)=>{
         });
 
         //check if user has already entered their inputs for that day, if no, then create a new document to save the inputs, else update the already existing document
-        if(!dailyInput){
+        if(!dailyInput && occupants){
             console.log('creating document');
             await calculatorInputsModel.create({
                 user: req.session.email,
@@ -135,7 +135,7 @@ router.post('/basicInfo', isAuthenticated, async (req, res)=>{
             console.log('calculator inputs created');
            return res.status(201).json({message: 'calculator inputs created'});
         }
-        else{
+        else if(dailyInput && occupants){
             console.log('updating document');
             await calculatorInputsModel.updateOne(
                 {user: req.session.email, date: today},
@@ -145,6 +145,8 @@ router.post('/basicInfo', isAuthenticated, async (req, res)=>{
             );
             console.log('calculator inputs updated');
             return res.status(200).json({message: 'calculator inputs updated'});
+        }else{
+            res.status(400).json({message: 'occupants cannot be empty'})
         }
     }catch(err){
         console.log(err);
