@@ -9,6 +9,7 @@ const connect = require(path.join(__dirname, './db/dbConnection.js'));
 
 connect();
 app.use(cors());
+app.set('trust proxy', 1);
 app.use('/waterSaver', router);
 
  
