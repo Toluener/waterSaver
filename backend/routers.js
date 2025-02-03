@@ -87,7 +87,7 @@ router.post('/signin', async (req, res)=>{
     req.session.email = user.email;
     return res.status(200).json({
         message: "you're logged in",
-        cookie: `waterSaverC=${req.sessionID}`
+        cookie: req.sessionID
     });
    }
    } catch(err){
