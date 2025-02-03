@@ -7,11 +7,11 @@ const userSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true, unique: true},
     userName: String,
+    emailed: { type: Boolean, default: false },
     date: {
         type: Date,
         default: formatDate(new Date()),
-    },
-    emailed: String
+    }
 });
 
 const userModel = mongoose.model('User', userSchema, 'Users');

@@ -64,12 +64,12 @@ let sendWelcomeEmail = async (subject, text)=>{
                     console.log(`sending welcome mail to ${users[i].email}`);
                     await transporter.sendMail(mailOptions);
                     await userModel.updateOne(
-                        {user: users[i].email},
+                        {email: users[i].email},
                         {$set: {
-                            emailed: 'Sent'
+                            emailed: true
                         }}
                     );
-                    console.log('welcome emails sent');
+                    console.log('welcome email sent');
                 }catch(err){
                     console.log(err);
                 }
