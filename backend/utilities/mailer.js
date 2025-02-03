@@ -1,45 +1,72 @@
 const nodemailer = require('nodemailer');
+const cron = require('node-cron');
 const path = require('path');
 require('dotenv').config({path: '../configurations/Env.env'});
 const {userModel, calculatorInputsModel, dailyWaterUsageModel} = require(path.join(__dirname, '../db/Schema.js'));
+const {formatDate} = require(path.join(__dirname, './utilityFunctions.js'));
 
 
-let sendingEmail = async ()=>{
-    let users = await userModel.find({}, {email: 1, _id: 0});
-    
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "ehinmosantolu@gmail.com",
-          pass: process.env.PASS,
-        },
-      });
-    
+//creating the transporter
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "watersavercalc@gmail.com",
+      pass: "dfqwgyvtihmvrach",
+    },
+  });
 
-    //Function to send mails using the transporter
-    const sendEmail = (to, subject, text)=>{
-        for(let i = 0; i < to.length; i++){
-            const mailOptions = {
-                from: "ehinmosantolu@gmail.com",
-                to: to[i].email,
-                subject: subject,
-                text: text
-            };
-        
-            let useTransporter = async ()=>{
-                try{
-                    console.log('sending mails...');
-                    const info = await transporter.sendMail(mailOptions);
-                    console.log('email sent');
-                }catch(err){
-                    console.log(err);
-                }
-            };
-            useTransporter();
+
+
+//sending monthly email reports
+let sendMonthlyEmail = async (subject, text)=>{
+    let users = await userModel.find({});
+
+    //using for loop to send emails to all users
+    for(let i = 0; i < users.length; i++){
+        const mailOptions = {
+            from: "waterSaver",
+            to: users[i].email,
+            subject: subject,
+            html: text
+        };
+
+        try{
+            console.log('sending monthly mails...');
+            await transporter.sendMail(mailOptions);
+            console.log('monthly emails sent');
+        }catch(err){
+            console.log(err);
         }
     }
-    
-    sendEmail(users, 'waterSaver Notification', 'Welcome to water saver!');
 }
 
-sendingEmail();
+cron.schedule('0 23 1 * *', ()=>{
+    sendMonthlyEmail('waterSaver Notification', 'waterSaver monthly report!');
+})
+
+
+
+//sending welcome emails to newly registered users
+let sendWelcomeEmail = async (subject, text)=>{
+    let users = await userModel.find({date: formatDate(new Date())});
+
+    //using for loop to  send emails to all users
+    for(let i = 0; i < users.length; i++){
+            const mailOptions = {
+                from: "waterSaver",
+                to: users[i].email,
+                subject: subject,
+                html: text
+            };
+    
+            try{
+                console.log('sending welcome mails...');
+                await transporter.sendMail(mailOptions);
+                console.log('welcome emails sent');
+            }catch(err){
+                console.log(err);
+            }
+    }
+}
+
+module.exports = sendWelcomeEmail;

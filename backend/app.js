@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const webPush = require('web-push');
 const router = require('../backend/routers');
 const path = require('path'); 
@@ -7,6 +8,7 @@ require('dotenv').config({path: './configurations/Env.env'});
 const connect = require(path.join(__dirname, './db/dbConnection.js'));
 
 connect();
+app.use(cors());
 app.use('/waterSaver', router);
 
  

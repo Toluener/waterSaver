@@ -1,2 +1,4 @@
 node_modules/
 backend/configurations/Env.env
+mytemp/
+frontend/

@@ -6,7 +6,11 @@ const {formatDate} = require(path.join(__dirname, '../utilities/utilityFunctions
 const userSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true, unique: true},
-    userName: String
+    userName: String,
+    date: {
+        type: Date,
+        default: formatDate(new Date()),
+    }
 });
 
 const userModel = mongoose.model('User', userSchema, 'Users');
@@ -18,7 +22,6 @@ const calculatorInputsSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: formatDate(new Date()),
-        unique: true
     }, 
     occupants: Number,
     averageShowerTime: Number,
@@ -39,7 +42,6 @@ const dailyWaterUsageSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: formatDate(new Date()),
-        unique: true
     },
     bathroomWaterUsage: Number,
     kitchenWaterUsage: Number,
