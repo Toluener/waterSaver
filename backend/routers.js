@@ -15,7 +15,7 @@ require('dotenv').config({path: './configurations/Env.env'});
 
 
 
-router.use(cors());
+router.use(cors({}));
 router.use(express.urlencoded({extended: true}));
 router.use(bodyParser.json());
 router.use(express.json());
@@ -76,7 +76,10 @@ router.post('/signin', async (req, res)=>{
     return res.status(401).json({message:'password does not match'}); 
    }else{
     req.session.email = user.email;
-    return res.status(200).json({message: "you're logged in"});
+    return res.status(200).json({
+        message: "you're logged in",
+        cookie: req.session.cookie
+    });
    }
    } catch(err){
     console.log(err);
