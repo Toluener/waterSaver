@@ -77,4 +77,11 @@ let sendWelcomeEmail = async (subject, text)=>{
     }
 }
 
+
+
+//aggregation of user's activities to be sent in the monthly email
+let aggregation = async ()=>{
+    let users = await userModel.find({});
+}
+
 module.exports = sendWelcomeEmail;

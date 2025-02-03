@@ -8,7 +8,10 @@ require('dotenv').config({path: './configurations/Env.env'});
 const connect = require(path.join(__dirname, './db/dbConnection.js'));
 
 connect();
-app.use(cors());
+app.use(cors({
+    origin: "http://102.89.82.236:3000",
+    credentials: true
+}));
 app.set('trust proxy', 1);
 app.use('/waterSaver', router);
 

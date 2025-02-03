@@ -21,7 +21,7 @@ const allowedOrigins = [
   ]
 
 router.use(cors({
-    origin: allowedOrigins,
+    origin: "http://102.89.82.236:3000",
     credentials: true
 }));
 router.use(express.urlencoded({extended: true}));
@@ -86,8 +86,7 @@ router.post('/signin', async (req, res)=>{
    }else{
     req.session.email = user.email;
     return res.status(200).json({
-        message: "you're logged in",
-        cookie: req.sessionID
+        message: "you're logged in"
     });
    }
    } catch(err){
