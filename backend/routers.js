@@ -26,6 +26,8 @@ router.use(cors({
     credentials: true
 }));
 
+router.options("*", cors());
+
 router.use(express.urlencoded({extended: true}));
 router.use(bodyParser.json());
 router.use(express.json());

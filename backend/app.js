@@ -8,10 +8,18 @@ require('dotenv').config({path: './configurations/Env.env'});
 const connect = require(path.join(__dirname, './db/dbConnection.js'));
 
 connect();
+
+const allowedOrigins = [
+    "http://localhost:3000", // ✅ Allow local development
+    "http://102.89.82.236:3000", // ✅ Allow frontend on another laptop
+    "https://your-frontend.com", // ✅ (Optional) If your frontend is deployed
+  ];
+  
 app.use(cors({
-    origin: "http://102.89.82.236:3000",
+    origin: allowedOrigins,
     credentials: true
 }));
+app.options("*", cors());
 app.set('trust proxy', 1);
 app.use('/waterSaver', router);
 
