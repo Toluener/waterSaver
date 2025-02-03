@@ -2,7 +2,7 @@
 
 let isAuthenticated = (req, res, next)=>{
  if(!req.session.email){
-    res.redirect('login')
+    return res.status(401).json({message: 'Please login to access this resource' })
  }
  else{
    next();
