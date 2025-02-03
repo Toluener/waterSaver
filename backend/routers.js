@@ -410,6 +410,9 @@ router.post('/outdoorInputs', isAuthenticated, async (req, res)=>{
                 );
                 return res.status(200).json({message: 'outdoor water usage added'});
             }
+            else{
+                return res.status(204);
+            }
         }
     }catch(err){
         console.log(err);
@@ -436,7 +439,7 @@ router.get('/results', isAuthenticated, async (req, res)=>{
         let swimmingPoolWaterUsage = formatValue(dailyUsage.swimmingPoolWaterUsage);
         let carWaterUsage = formatValue(dailyUsage.carWaterUsage);
 
-        res.status(200).json({
+        return res.status(200).json({
             bathroomWaterUsage: bathroomWaterUsage,
             kitchenWaterUsage: kitchenWaterUsage,
             laundryWaterUsage: laundryWaterUsage,
@@ -449,7 +452,7 @@ router.get('/results', isAuthenticated, async (req, res)=>{
     }
 })
 
-router.post('/logout', (req, res)=>{
+router.post('/logout', isAuthenticated, (req, res)=>{
     req.session.destroy((err) => {
         if(err){
             return res.status(500).json({message: "Logout failed"});

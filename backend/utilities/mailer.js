@@ -59,12 +59,22 @@ let sendWelcomeEmail = async (subject, text)=>{
                 html: text
             };
     
-            try{
-                console.log('sending welcome mails...');
-                await transporter.sendMail(mailOptions);
-                console.log('welcome emails sent');
-            }catch(err){
-                console.log(err);
+            if(!users[i].emailed){
+                try{
+                    console.log(`sending welcome mail to ${users[i].email}`);
+                    await transporter.sendMail(mailOptions);
+                    await userModel.updateOne(
+                        {user: req.session.email},
+                        {$set: {
+                            emailed: 'Sent'
+                        }}
+                    );
+                    console.log('welcome emails sent');
+                }catch(err){
+                    console.log(err);
+                }
+            }else{
+                return;
             }
     }
 }

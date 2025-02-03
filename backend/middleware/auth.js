@@ -6,7 +6,7 @@ let isAuthenticated = (req, res, next)=>{
  }
  else{
    next();
-    return;
+   return;
  }
 }
 

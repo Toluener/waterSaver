@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: formatDate(new Date()),
-    }
+    },
+    emailed: String
 });
 
 const userModel = mongoose.model('User', userSchema, 'Users');
