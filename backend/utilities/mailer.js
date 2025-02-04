@@ -98,7 +98,7 @@ let sendMonthlyEmail = async (text)=>{
     }
 }
 
-cron.schedule('* * * * *', ()=>{
+cron.schedule('0 10 1 * *', ()=>{
     sendMonthlyEmail('waterSaver monthly report!');
 })
 
