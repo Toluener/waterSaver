@@ -11,22 +11,26 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
       user: "watersavercalc@gmail.com",
-      pass: "dfqwgyvtihmvrach",
+      pass: process.env.EMAIL_PASS,
     },
   });
 
 
 
 //sending monthly email reports
-let sendMonthlyEmail = async (subject, text)=>{
-    let users = await userModel.find({});
+let sendMonthlyEmail = async (text)=>{
+    let aggregationArr = aggregation();
+
 
     //using for loop to send emails to all users
     for(let i = 0; i < users.length; i++){
+
+
+
         const mailOptions = {
             from: "waterSaver",
-            to: users[i].email,
-            subject: subject,
+            to: aggregationArr[i].user,
+            subject: aggregationArr[i],
             html: text
         };
 
@@ -82,6 +86,50 @@ let sendWelcomeEmail = async (subject, text)=>{
 //aggregation of user's activities to be sent in the monthly email
 let aggregation = async ()=>{
     let users = await userModel.find({});
+    let aggregationArr = [];
+
+    for(let i = 0; i < users.length; i++){
+        let email = users[i].email;
+       try{
+       let waterUsage = dailyWaterUsageModel.find({user: email});
+       let totalBathroomWaterUsage, totalKitchenWaterUsage, totalLaundryWaterUsage, totalCarWaterUsage, totalSwimmingPoolWaterUsage;
+
+       for(let j = 0; j < waterUsage.length; i++){
+        let dateObj = waterUsage[j].date;
+        console.log('date obj '+ dateObj);
+        let month = dateObj.getMonth();
+        console.log('month is: ' + month);
+        
+        
+        if((new Date()).getMonth == (month)){
+            let { bathroomWaterUsage, kitchenWaterUsage, laundryWaterUsage, carWaterUsage, swimmingPoolWaterUsage} = waterUsage[j];
+
+            totalBathroomWaterUsage += bathroomWaterUsage;
+            totalKitchenWaterUsage += kitchenWaterUsage;
+            totalLaundryWaterUsage += laundryWaterUsage;
+            totalSwimmingPoolWaterUsage += swimmingPoolWaterUsage;
+            totalCarWaterUsage += carWaterUsage;
+        }else{
+            console.log('next');
+        }
+       }
+
+       let usersAggregate = {
+        user: email,
+        totalBathroomWaterUsage: totalBathroomWaterUsage,
+        totalKitchenWaterUsage: totalKitchenWaterUsage,
+        totalLaundryWaterUsage: totalLaundryWaterUsage,
+        totalSwimmingPoolWaterUsage: totalSwimmingPoolWaterUsage,
+        totalCarWaterUsage: totalCarWaterUsage     
+       }
+
+       aggregationArr.push(usersAggregate);
+
+       }catch(err){
+            console.log(err);
+       }
+    }
+    return aggregationArr;
 }
 
 module.exports = sendWelcomeEmail;

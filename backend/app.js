@@ -10,10 +10,11 @@ const connect = require(path.join(__dirname, './db/dbConnection.js'));
 connect();
 
 const allowedOrigins = [
-    "http://localhost:3000", // ✅ Allow local development
-    "http://102.89.82.236:3000", // ✅ Allow frontend on another laptop
-    "https://your-frontend.com", // ✅ (Optional) If your frontend is deployed
+    "http://localhost:3000",
+    "http://102.89.82.236:3000",
+    "https://water-saver-project.vercel.app/"
   ];
+
   
 app.use(cors({
     origin: allowedOrigins,

@@ -16,9 +16,9 @@ require('dotenv').config({path: './configurations/Env.env'});
 
 
 const allowedOrigins = [
-    "http://localhost:3000", // ✅ Allow local development
-    "http://102.89.82.236:3000", // ✅ Allow frontend on another laptop
-    "https://your-frontend.com", // ✅ (Optional) If your frontend is deployed
+    "http://localhost:3000",
+    "http://102.89.82.236:3000",
+    "https://water-saver-project.vercel.app/"
   ];
 
 router.use(cors({
@@ -129,7 +129,7 @@ router.post('/subscribe', isAuthenticated, async (req, res)=>{
 
 
 //route to obtain basic info (tested)
-router.post('/basicInfo', async (req, res)=>{
+router.post('/basicInfo', isAuthenticated, async (req, res)=>{
     let {occupants} = req.body;
     try{
         let today = formatDate(new Date());
