@@ -36,7 +36,7 @@ router.use(session({
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {httpOnly: true, sameSite: 'strict', maxAge: 7200000},
+    cookie: {httpOnly: true, sameSite: 'None', secure: false, maxAge: 7200000},
     name: 'waterSaverC',
     store: mongoStore.create({
         mongoUrl: `mongodb+srv://toluehinmosan51:${process.env.DB_PASSWORD}@cluster0.ofefc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`,
