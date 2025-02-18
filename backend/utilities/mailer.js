@@ -24,43 +24,61 @@ let aggregation = async ()=>{
 
     for(let i = 0; i < users.length; i++){
         let email = users[i].email;
-        console.log('ággregate function user email: ' + email);
+        console.log('aggregate function user email: ' + email);
        try{
        let waterUsage = await dailyWaterUsageModel.find({user: email});
-       let totalBathroomWaterUsage, totalKitchenWaterUsage, totalLaundryWaterUsage, totalCarWaterUsage, totalSwimmingPoolWaterUsage;
 
-       for(let j = 0; j < waterUsage.length; i++){
-        let dateObj = waterUsage[j].date;
-        console.log('date obj '+ dateObj);
-        let month = dateObj.getMonth() + 1;
-        console.log('month is: ' + month);
-        
-        
-        if((new Date()).getMonth == (month)){
-            let { bathroomWaterUsage, kitchenWaterUsage, laundryWaterUsage, carWaterUsage, swimmingPoolWaterUsage} = waterUsage[j];
-
-            totalBathroomWaterUsage += bathroomWaterUsage;
-            totalKitchenWaterUsage += kitchenWaterUsage;
-            totalLaundryWaterUsage += laundryWaterUsage;
-            totalSwimmingPoolWaterUsage += swimmingPoolWaterUsage;
-            totalCarWaterUsage += carWaterUsage;
-        }else{
-            console.log('next');
-        }
+       let totalValues = {
+        totalBathroomWaterUsage: 0,
+        totalKitchenWaterUsage: 0,
+        totalLaundryWaterUsage: 0,
+        totalCarWaterUsage: 0,
+        totalSwimmingPoolWaterUsage: 0
        }
+       
 
-       let usersAggregate = {
-        user: email,
-        totalBathroomWaterUsage: totalBathroomWaterUsage,
-        totalKitchenWaterUsage: totalKitchenWaterUsage,
-        totalLaundryWaterUsage: totalLaundryWaterUsage,
-        totalSwimmingPoolWaterUsage: totalSwimmingPoolWaterUsage,
-        totalCarWaterUsage: totalCarWaterUsage     
+       if(waterUsage.length != 0){
+        for(let j = 0; j < waterUsage.length; j++){
+            let dateObj = new Date(waterUsage[j].date);
+            let month = dateObj.getMonth() + 1;
+            let date = new Date();
+            let compareMonth = date.getMonth() + 1;
+
+            
+            if(compareMonth == month){
+                console.log('calculating');
+                let { bathroomWaterUsage, kitchenWaterUsage, laundryWaterUsage, carWaterUsage, swimmingPoolWaterUsage} = waterUsage[j];
+
+                let safeAdd = (value, targetObj, key)=>{
+                    if (!isNaN(value) && value !== undefined) {
+                        targetObj[key] += value;
+                    }
+                }
+            
+                safeAdd(bathroomWaterUsage, totalValues,"totalBathroomWaterUsage");
+                safeAdd(kitchenWaterUsage, totalValues, "totalKitchenWaterUsage");
+                safeAdd(laundryWaterUsage, totalValues, "totalLaundryWaterUsage");
+                safeAdd(swimmingPoolWaterUsage, totalValues, "totalSwimmingPoolWaterUsage");
+                safeAdd(carWaterUsage, totalValues, "totalCarWaterUsage");
+            }else{
+                console.log('next');
+            }
+           }
+    
+           let usersAggregate = {
+            user: email,
+            totalBathroomWaterUsage: totalValues.totalBathroomWaterUsage,
+            totalKitchenWaterUsage: totalValues.totalKitchenWaterUsage,
+            totalLaundryWaterUsage: totalValues.totalLaundryWaterUsage,
+            totalSwimmingPoolWaterUsage: totalValues.totalSwimmingPoolWaterUsage,
+            totalCarWaterUsage: totalValues.totalCarWaterUsage     
+           }
+           console.log('usersAggregate ' + usersAggregate.user);
+    
+           aggregationArr.push(usersAggregate);
+       } else{
+        console.log('user does not have any water usage input for email: ' + email);
        }
-       console.log('usersAggregate ' + usersAggregate);
-
-       aggregationArr.push(usersAggregate);
-
        }catch(err){
             console.log(err);
        }
@@ -73,7 +91,6 @@ let aggregation = async ()=>{
 let sendMonthlyEmail = async (text)=>{
 
     let aggregationArr = await aggregation();
-    console.log('monthyly email aggregation ' + aggregationArr);
 
 
     //using for loop to send emails to all users
@@ -81,11 +98,12 @@ let sendMonthlyEmail = async (text)=>{
 
 
 
+
         const mailOptions = {
             from: "waterSaver",
             to: aggregationArr[i].user,
             subject: text,
-            text: aggregationArr[i]
+            text: `\nFor your monthly water usage, you used a total of ${aggregationArr[i].totalBathroomWaterUsage} litres of water for bathroom usage, your kitchen water usage was ${aggregationArr[i].totalKitchenWaterUsage} litres, your laundry water usage was ${aggregationArr[i].totalLaundryWaterUsage} litres, your swimming pool water usage was ${aggregationArr[i].totalSwimmingPoolWaterUsage} litres, and your car water usage was ${aggregationArr[i].totalCarWaterUsage}. \nYour total water usage for last month is ${aggregationArr[i].totalBathroomWaterUsage + aggregationArr[i].totalKitchenWaterUsage + aggregationArr[i].totalLaundryWaterUsage + aggregationArr[i].totalSwimmingPoolWaterUsage + aggregationArr[i].totalCarWaterUsage} litres. Keep improving on your water saving journey!.`
         };
 
         try{
@@ -98,9 +116,9 @@ let sendMonthlyEmail = async (text)=>{
     }
 }
 
-cron.schedule('0 10 1 * *', ()=>{
-    sendMonthlyEmail('waterSaver monthly report!');
-})
+// cron.schedule('* * * * *', ()=>{
+//     sendMonthlyEmail('waterSaver monthly report!');
+// })
 
 
 

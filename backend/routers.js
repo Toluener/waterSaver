@@ -438,23 +438,33 @@ router.get('/results', isAuthenticated, async (req, res)=>{
             date: formatDate(new Date())
         });
     
-        // function to format the values displayed to the user
-        const formatValue = (value) => value ? value : "N/A";
+       if(dailyUsage != null){
+         // function to format the values displayed to the user
+         const formatValue = (value) => value ? value : "N/A";
     
-        console.log(dailyUsage);
-        let bathroomWaterUsage = formatValue(dailyUsage.bathroomWaterUsage);
-        let kitchenWaterUsage = formatValue(dailyUsage.kitchenWaterUsage);
-        let laundryWaterUsage = formatValue(dailyUsage.laundryWaterUsage);
-        let swimmingPoolWaterUsage = formatValue(dailyUsage.swimmingPoolWaterUsage);
-        let carWaterUsage = formatValue(dailyUsage.carWaterUsage);
-
+         console.log(dailyUsage);
+         let bathroomWaterUsage = formatValue(dailyUsage.bathroomWaterUsage);
+         let kitchenWaterUsage = formatValue(dailyUsage.kitchenWaterUsage);
+         let laundryWaterUsage = formatValue(dailyUsage.laundryWaterUsage);
+         let swimmingPoolWaterUsage = formatValue(dailyUsage.swimmingPoolWaterUsage);
+         let carWaterUsage = formatValue(dailyUsage.carWaterUsage);
+ 
+         return res.status(200).json({
+             bathroomWaterUsage: bathroomWaterUsage,
+             kitchenWaterUsage: kitchenWaterUsage,
+             laundryWaterUsage: laundryWaterUsage,
+             swimmingPoolWaterUsage: swimmingPoolWaterUsage,
+             carWaterUsage: carWaterUsage
+         });
+       }else{
         return res.status(200).json({
-            bathroomWaterUsage: bathroomWaterUsage,
-            kitchenWaterUsage: kitchenWaterUsage,
-            laundryWaterUsage: laundryWaterUsage,
-            swimmingPoolWaterUsage: swimmingPoolWaterUsage,
-            carWaterUsage: carWaterUsage
-        });
+            bathroomWaterUsage: 'N/A',
+             kitchenWaterUsage: 'N/A',
+             laundryWaterUsage: 'N/A',
+             swimmingPoolWaterUsage: 'N/A',
+             carWaterUsage: 'N/A'
+        })
+       }
     }catch(err){
         console.log(err);
         res.status(500).json({message: err});
