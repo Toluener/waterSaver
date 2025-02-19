@@ -59,4 +59,4 @@ let scheduleNotifications = (interval)=>{
   }
 
 //scheduling notifications for occur every 5 mins
-//scheduleNotifications(300000);
+scheduleNotifications(18000000);
