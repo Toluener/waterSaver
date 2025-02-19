@@ -65,7 +65,7 @@ router.post('/register', async (req, res)=>{
          else {
             await userModel.create({email: email, password: password, username: username});
             
-         await sendWelcomeEmail('waterSaver Welcome Message', 'Welcome to waterSaver!. <br> We are exicited to be part of your water saving journey, please check out the application for details on how to use the calculator. <br> Wishing you a pleasant and fulfilling journey with us.<br><br>-Ibekwe Gozie from waterSaver App.');
+         await sendWelcomeEmail('waterSaver Welcome Message', 'Welcome to waterSaver!. <br> We are exicited to be part of your water saving journey, please check out the application for details on how to use the calculator. <br> Wishing you a pleasant and fulfilling journey with us.<br><br>-Ehinmosan Tolu from waterSaver App.');
          console.log('done');
          res.status(201).json({message: 'User has been sucessfully registered, please log in'});
          }
