@@ -45,7 +45,7 @@ let aggregation = async ()=>{
             let compareMonth = date.getMonth() + 1;
 
             
-            if(compareMonth == month){
+            if(compareMonth == (month - 1)){
                 console.log('calculating');
                 let { bathroomWaterUsage, kitchenWaterUsage, laundryWaterUsage, carWaterUsage, swimmingPoolWaterUsage} = waterUsage[j];
 
@@ -116,9 +116,9 @@ let sendMonthlyEmail = async (text)=>{
     }
 }
 
-// cron.schedule('* * * * *', ()=>{
-//     sendMonthlyEmail('waterSaver monthly report!');
-// })
+cron.schedule('0 10 1 * *', ()=>{
+    sendMonthlyEmail('waterSaver monthly report!');
+})
 
 
 
