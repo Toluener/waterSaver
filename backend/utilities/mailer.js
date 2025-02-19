@@ -8,7 +8,9 @@ const {formatDate} = require(path.join(__dirname, './utilityFunctions.js'));
 
 //creating the transporter
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: 'smtp.office365.com',
+    port: 465,
+    secure: true,
     auth: {
       user: "watersavercalc@gmail.com",
       pass: process.env.EMAIL_PASS,
